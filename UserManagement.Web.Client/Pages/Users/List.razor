@@ -1,0 +1,77 @@
+﻿@page "/users"
+@using UserManagement.Shared.Models
+@using UserManagement.Web.Client.Services.Interfaces
+@inject IUserApiService UserApiService
+
+<PageTitle>Users</PageTitle>
+
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Forename</th>
+				<th>Surname</th>
+				<th>Email</th>
+				<th>Account Active</th>
+				<th style="width: 1px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (userList == null)
+			{
+				<tr>
+					<td colspan="6"><em>Loading...</em></td>
+				</tr>
+			}
+			else
+			{
+				@foreach (var item in userList.Items)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td>@item.Forename</td>
+						<td>@item.Surname</td>
+						<td>@item.Email</td>
+						<td>@(item.IsActive ? "Yes" : "No")</td>
+						<td>
+							<div class="dropdown">
+								<button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="btnToggleActions">
+									Actions
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="btnToggleActions">
+									<li><a class="dropdown-item" href="#">View</a></li>
+									<li><a class="dropdown-item" href="#">Edit</a></li>
+									<li><a class="dropdown-item" href="#">Delete</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+</div>
+
+
+<div>
+	<div class="btn-group" role="group">
+		<a asp-controller="Users" class="btn btn-success">Show All</a>
+		<a href="#" class="btn btn-primary">Active Only</a>
+		<a href="#" class="btn btn-danger">Non Active</a>
+	</div>
+
+	<a href="#" class="btn btn-primary float-end">
+		Add User
+	</a>
+</div>
+
+
+@code {
+	private UserListDto? userList;
+
+	protected override async Task OnInitializedAsync()
+	{
+		userList = await UserApiService.GetUsersAsync();
+	}
+}
