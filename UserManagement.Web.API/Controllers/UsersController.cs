@@ -11,9 +11,9 @@ public class UsersController : ControllerBase
     public UsersController(IUserService userService) => _userService = userService;
 
     [HttpGet]
-    public ActionResult<UserListDto> GetUsers()
+    public async Task<ActionResult<UserListDto>> GetUsersAsync()
     {
-        var users = _userService.GetAll().Select(p => new UserDto
+        var users = (await _userService.GetAllAsync()).Select(p => new UserDto
         {
             Id = p.Id,
             Forename = p.Forename,
