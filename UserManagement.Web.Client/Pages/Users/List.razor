@@ -13,6 +13,7 @@
 				<th>Forename</th>
 				<th>Surname</th>
 				<th>Email</th>
+				<th>Date of Birth</th>
 				<th>Account Active</th>
 				<th style="width: 1px;"></th>
 			</tr>
@@ -33,6 +34,7 @@
 						<td>@item.Forename</td>
 						<td>@item.Surname</td>
 						<td>@item.Email</td>
+						<td>@(item.DateOfBirth?.ToString("dd/MM/yyyy") ?? "N/A")</td>
 						<td>@(item.IsActive ? "Yes" : "No")</td>
 						<td>
 							<div class="dropdown">
