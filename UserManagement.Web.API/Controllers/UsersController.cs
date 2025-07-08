@@ -11,9 +11,13 @@ public class UsersController : ControllerBase
     public UsersController(IUserService userService) => _userService = userService;
 
     [HttpGet]
-    public async Task<ActionResult<UserListDto>> GetUsersAsync()
+   public async Task<ActionResult<UserListDto>> GetUsersAsync([FromQuery] bool? isActive = null)
     {
-        var users = (await _userService.GetAllAsync()).Select(p => new UserDto
+        IEnumerable<Models.User> users = isActive.HasValue 
+            ? await _userService.FilterByActiveAsync(isActive.Value)
+            : await _userService.GetAllAsync();
+
+        IEnumerable<UserDto> usersDtos = users.Select(p => new UserDto
         {
             Id = p.Id,
             Forename = p.Forename,
@@ -22,11 +26,11 @@ public class UsersController : ControllerBase
             IsActive = p.IsActive
         });
 
-        var result = new UserListDto
+        UserListDto result = new UserListDto
         {
-            Items = users.ToList()
+            Items = usersDtos.ToList()
         };
 
-        return Ok(result); 
+        return Ok(result);
     }
 }

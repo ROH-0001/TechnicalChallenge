@@ -56,22 +56,38 @@
 
 <div>
 	<div class="btn-group" role="group">
-		<a asp-controller="Users" class="btn btn-success">Show All</a>
-		<a href="#" class="btn btn-primary">Active Only</a>
-		<a href="#" class="btn btn-danger">Non Active</a>
+		<button class="btn @(currentFilter == "all" ? "btn-success" : "btn-outline-success")" @onclick="ShowAllUsers">Show All</button>
+		<button class="btn @(currentFilter == "active" ? "btn-primary" : "btn-outline-primary")" @onclick="ShowActiveUsers">Active Only</button>
+		<button class="btn @(currentFilter == "inactive" ? "btn-danger" : "btn-outline-danger")" @onclick="ShowNonActiveUsers">Non Active</button>
 	</div>
-
-	<a href="#" class="btn btn-primary float-end">
+	<button class="btn btn-primary float-end">
 		Add User
-	</a>
+	</button>
 </div>
 
 
 @code {
 	private UserListDto? userList;
+	private string currentFilter = "all";
 
 	protected override async Task OnInitializedAsync()
 	{
-		userList = await UserApiService.GetUsersAsync();
+		await LoadUsers();
 	}
+
+	private async Task LoadUsers(bool? isActive = null)
+	{
+		currentFilter = isActive switch
+		{
+			null => "all",
+			true => "active",
+			false => "inactive"
+		};
+
+		userList = await UserApiService.GetUsersAsync(isActive);
+	}
+
+	private async Task ShowAllUsers() => await LoadUsers();
+	private async Task ShowActiveUsers() => await LoadUsers(true);
+	private async Task ShowNonActiveUsers() => await LoadUsers(false);
 }

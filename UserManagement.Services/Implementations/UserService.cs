@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using UserManagement.Data;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
@@ -15,10 +15,10 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="isActive"></param>
     /// <returns></returns>
-    public Task<IEnumerable<User>> FilterByActiveAsync(bool isActive)
+    public async Task<IEnumerable<User>> FilterByActiveAsync(bool isActive)
     {
-        throw new NotImplementedException();
+        IQueryable<User> AllUsers = await _dataAccess.GetAllAsync<User>();
+        return AllUsers.Where(x => x.IsActive == isActive);
     }
-
     public async Task<IEnumerable<User>> GetAllAsync() => await _dataAccess.GetAllAsync<User>();
 }

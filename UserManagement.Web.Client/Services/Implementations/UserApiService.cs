@@ -13,11 +13,12 @@ public class UserApiService : IUserApiService
         _httpClient = httpClient;
     }
 
-    public async Task<UserListDto?> GetUsersAsync()
+    public async Task<UserListDto?> GetUsersAsync(bool? isActive = null)
     {
         try
         {
-            var response = await _httpClient.GetFromJsonAsync<UserListDto>("api/users");
+            string url = isActive.HasValue ? $"api/users?isActive={isActive.Value}" : "api/users";
+            UserListDto? response = await _httpClient.GetFromJsonAsync<UserListDto>(url);
             return response;
         }
         catch (Exception ex)

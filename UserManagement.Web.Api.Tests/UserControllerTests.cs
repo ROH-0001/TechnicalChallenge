@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Shared.Models;
@@ -8,14 +9,14 @@ namespace UserManagement.Web.Api.Tests;
 public class UsersControllerTests
 {
     [Fact]
-    public void GetUsers_WhenServiceReturnsUsers_ModelMustContainUsers()
+    public async Task GetUsers_WhenServiceReturnsUsers_ModelMustContainUsers()
     {
         // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
         var controller = CreateController();
         var users = SetupUsers();
 
         // Act: Invokes the method under test with the arranged parameters.
-        var result = controller.GetUsers();
+        var result = await controller.GetUsersAsync();
 
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Result
@@ -39,8 +40,8 @@ public class UsersControllerTests
         };
 
         _userService
-            .Setup(s => s.GetAll())
-            .Returns(users);
+            .Setup(s => s.GetAllAsync())
+            .ReturnsAsync(users);
 
         return users;
     }
