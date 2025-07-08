@@ -27,6 +27,6 @@ public class UsersController : ControllerBase
             Items = users.ToList()
         };
 
-        return Ok(result);
+        return Ok(result); 
     }
 }
