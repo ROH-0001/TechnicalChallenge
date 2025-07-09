@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using UserManagement.Shared.ValidationAttributes;
 
 
 namespace UserManagement.Shared.Forms;
@@ -13,10 +14,13 @@ public class CreateUserDto
     public string Surname { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Email is required")]
+    [StringLength(254, ErrorMessage = "Email cannot exceed 254 characters")]
     [EmailAddress(ErrorMessage = "Invalid email format")]
     public string Email { get; set; } = string.Empty;
 
     public bool IsActive { get; set; } = true;
 
+    [Required(ErrorMessage = "Date Of Birth is required")]
+    [DateOfBirth]
     public DateTime? DateOfBirth { get; set; }
 }

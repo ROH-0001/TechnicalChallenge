@@ -1,0 +1,66 @@
+﻿@page "/users/{Id:long}"
+@using UserManagement.Shared.Models
+@using UserManagement.Web.Client.Services.Interfaces
+@inject IUserApiService UserApiService
+@inject NavigationManager Navigation
+
+<PageTitle>View User</PageTitle>
+
+@if (user == null)
+{
+	<em>Loading...</em>
+}
+else
+{
+	<h3>User Details</h3>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>ID</th>
+				<td>@user.Id</td>
+			</tr>
+			<tr>
+				<th>Forename</th>
+				<td>@user.Forename</td>
+			</tr>
+			<tr>
+				<th>Surname</th>
+				<td>@user.Surname</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>@user.Email</td>
+			</tr>
+			<tr>
+				<th>Date of Birth</th>
+				<td>@(user.DateOfBirth?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td>@(user.IsActive ? "Active" : "Inactive")</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<button class="btn btn-primary" @onclick="Edit">Edit</button>
+		<button class="btn btn-danger" @onclick="Delete">Delete</button>
+		<button class="btn btn-secondary" @onclick="BackToList">Back to List</button>
+	</div>
+}
+
+@code {
+	[Parameter] public long Id { get; set; }
+
+	private UserDto? user;
+
+	protected override async Task OnInitializedAsync()
+	{
+		user = await UserApiService.GetUserByIdAsync(Id);
+	}
+
+	private void Edit() => Navigation.NavigateTo($"/users/{Id}/edit");
+	private void Delete() => Navigation.NavigateTo($"/users/{Id}/delete");
+	private void BackToList() => Navigation.NavigateTo("/users");
+}

@@ -42,9 +42,24 @@
 									Actions
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-									<li><a class="dropdown-item" href="#">View</a></li>
-									<li><a class="dropdown-item" href="#">Edit</a></li>
-									<li><a class="dropdown-item" href="#">Delete</a></li>
+									<li>
+										<NavLink class="dropdown-item" href="@($"users/{item.Id}")">
+											View
+										</NavLink>
+
+									</li>
+
+									<li>
+										<NavLink class="dropdown-item" href="@($"users/{item.Id}/edit")">
+											Edit
+										</NavLink>
+									</li>
+
+									<li>
+										<NavLink class="dropdown-item" href="@($"users/{item.Id}/delete")">
+											Delete
+										</NavLink>
+									</li>
 								</ul>
 							</div>
 						</td>
@@ -62,9 +77,9 @@
 		<button class="btn @(currentFilter == "active" ? "btn-primary" : "btn-outline-primary")" @onclick="ShowActiveUsers">Active Only</button>
 		<button class="btn @(currentFilter == "inactive" ? "btn-danger" : "btn-outline-danger")" @onclick="ShowNonActiveUsers">Non Active</button>
 	</div>
-	<button class="btn btn-primary float-end">
-		Add User
-	</button>
+		<NavLink class="text-light btn btn-primary float-end" href="users/add">
+			Add User
+		</NavLink>
 </div>
 
 

@@ -1,0 +1,68 @@
+﻿@page "/users/add"
+@using UserManagement.Shared.Forms
+@using UserManagement.Shared.Models
+@using UserManagement.Web.Client.Services.Interfaces
+@inject IUserApiService UserApiService
+@inject NavigationManager Navigation
+
+<PageTitle>Add User</PageTitle>
+
+<h3>Add New User</h3>
+
+<EditForm Model="createUserDto" OnValidSubmit="HandleValidSubmit">
+	<DataAnnotationsValidator />
+	<ValidationSummary class="text-danger" />
+
+	<div class="mb-3">
+		<label for="forename" class="form-label">Forename</label>
+		<InputText id="forename" class="form-control" @bind-Value="createUserDto.Forename" />
+		<ValidationMessage For="() => createUserDto.Forename" class="text-danger" />
+	</div>
+
+	<div class="mb-3">
+		<label for="surname" class="form-label">Surname</label>
+		<InputText id="surname" class="form-control" @bind-Value="createUserDto.Surname" />
+		<ValidationMessage For="() => createUserDto.Surname" class="text-danger" />
+	</div>
+
+	<div class="mb-3">
+		<label for="email" class="form-label">Email</label>
+		<InputText id="email" type="email" class="form-control" @bind-Value="createUserDto.Email" />
+		<ValidationMessage For="() => createUserDto.Email" class="text-danger" />
+	</div>
+
+	<div class="mb-3">
+		<label for="dateOfBirth" class="form-label">Date of Birth</label>
+		<InputDate id="dateOfBirth" class="form-control" @bind-Value="createUserDto.DateOfBirth" />
+		<ValidationMessage For="() => createUserDto.DateOfBirth" class="text-danger" />
+	</div>
+
+	<div class="mb-3 form-check">
+		<InputCheckbox id="isActive" class="form-check-input" @bind-Value="createUserDto.IsActive" />
+		<label class="form-check-label" for="isActive">Is Active</label>
+	</div>
+
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary" disabled="@isSubmitting">Create User</button>
+		<button type="button" class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
+	</div>
+</EditForm>
+
+@code {
+	private CreateUserDto createUserDto = new();
+	private bool isSubmitting;
+
+	private async Task HandleValidSubmit()
+	{
+		isSubmitting = true;
+		var result = await UserApiService.CreateAsync(createUserDto);
+		if (result != null)
+		{
+			Navigation.NavigateTo("/users");
+		}
+		isSubmitting = false;
+	}
+
+	private void Cancel() => Navigation.NavigateTo("/users");
+}
+

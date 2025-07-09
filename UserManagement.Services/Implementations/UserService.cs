@@ -36,11 +36,18 @@ public class UserService : IUserService
 
     public async Task<User?> UpdateAsync(User user)
     {
-        var existing = await GetUserByIdAsync(user.Id);
-        if (existing == null) return null;
+        var existingUser = await GetUserByIdAsync(user.Id);
+        if (existingUser == null) return null;
 
-        await _dataAccess.UpdateAsync(user);
-        return user;
+        //remap values onto the already tracked entity to get rid of duplicate key error trying to pass `user`
+        existingUser.Forename = user.Forename;
+        existingUser.Surname = user.Surname;
+        existingUser.Email = user.Email;
+        existingUser.IsActive = user.IsActive;
+        existingUser.DateOfBirth = user.DateOfBirth;
+
+        await _dataAccess.UpdateAsync(existingUser);
+        return existingUser;
     }
 
     public async Task<bool> DeleteAsync(long id)

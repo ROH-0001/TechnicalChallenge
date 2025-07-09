@@ -1,0 +1,95 @@
+﻿@page "/users/{Id:long}/edit"
+@using UserManagement.Shared.Forms
+@using UserManagement.Shared.Models
+@using UserManagement.Web.Client.Services.Interfaces
+@inject IUserApiService UserApiService
+@inject NavigationManager Navigation
+
+<PageTitle>Edit User</PageTitle>
+
+
+@if (updateUserDto == null)
+{
+	<em>Loading...</em>
+}
+else
+{
+	<h3>Edit User</h3>
+
+    <EditForm Model="updateUserDto" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="text-danger" />
+
+        <div class="mb-3">
+            <label for="forename" class="form-label">Forename</label>
+            <InputText id="forename" class="form-control" @bind-Value="updateUserDto.Forename" />
+            <ValidationMessage For="() => updateUserDto.Forename" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label for="surname" class="form-label">Surname</label>
+            <InputText id="surname" class="form-control" @bind-Value="updateUserDto.Surname" />
+            <ValidationMessage For="() => updateUserDto.Surname" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <InputText id="email" type="email" class="form-control" @bind-Value="updateUserDto.Email" />
+            <ValidationMessage For="() => updateUserDto.Email" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label for="dateOfBirth" class="form-label">Date of Birth</label>
+            <InputDate id="dateOfBirth" class="form-control" @bind-Value="updateUserDto.DateOfBirth" />
+            <ValidationMessage For="() => updateUserDto.DateOfBirth" class="text-danger" />
+        </div>
+
+        <div class="mb-3 form-check">
+            <InputCheckbox id="isActive" class="form-check-input" @bind-Value="updateUserDto.IsActive" />
+            <label class="form-check-label" for="isActive">Is Active</label>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary" disabled="@isSubmitting">Update User</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public long Id { get; set; }
+    
+    private UpdateUserDto? updateUserDto;
+    private bool isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await UserApiService.GetUserByIdAsync(Id);
+        if (user != null)
+        {
+            updateUserDto = new UpdateUserDto
+            {
+                Forename = user.Forename!,
+                Surname = user.Surname!,
+                Email = user.Email!,
+                IsActive = user.IsActive,
+                DateOfBirth = user.DateOfBirth
+            };
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (updateUserDto == null) return;
+        
+        isSubmitting = true;
+        var result = await UserApiService.UpdateAsync(Id, updateUserDto);
+        if (result != null)
+        {
+            Navigation.NavigateTo($"/users/{Id}");
+        }
+        isSubmitting = false;
+    }
+
+    private void Cancel() => Navigation.NavigateTo($"/users/{Id}");
+}

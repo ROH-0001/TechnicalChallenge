@@ -1,0 +1,75 @@
+﻿@page "/users/{Id:long}/delete"
+@using UserManagement.Shared.Models
+@using UserManagement.Web.Client.Services.Interfaces
+@inject IUserApiService UserApiService
+@inject NavigationManager Navigation
+
+<PageTitle>Delete User</PageTitle>
+
+
+@if (user == null)
+{
+	<em>Loading...</em>
+}
+else
+{
+	<h3>Delete User</h3>
+
+	<div class="alert alert-warning">
+		Warning: Are you sure you want to delete this user? This action cannot be undone.
+	</div>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Name</th>
+				<td>@user.Forename @user.Surname</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>@user.Email</td>
+			</tr>
+			<tr>
+				<th>Status</th>
+				<td>@(user.IsActive ? "Active" : "Inactive")</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<button class="btn btn-danger" @onclick="ConfirmDelete" disabled="@isDeleting">Delete User</button>
+		<button class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
+	</div>
+}
+
+@code {
+	[Parameter] public long Id { get; set; }
+
+	private UserDto? user;
+	private bool isDeleting;
+
+	protected override async Task OnInitializedAsync()
+	{
+		user = await UserApiService.GetUserByIdAsync(Id);
+	}
+
+	private async Task ConfirmDelete()
+	{
+		isDeleting = true;
+		try
+		{
+			var success = await UserApiService.DeleteAsync(Id);
+			if (success)
+			{
+				Navigation.NavigateTo("/users");
+			}
+		}
+		finally
+		{
+			isDeleting = false;
+		}
+	}
+
+	private void Cancel() => Navigation.NavigateTo($"/users/{Id}");
+}
+

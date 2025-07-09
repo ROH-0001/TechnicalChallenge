@@ -68,14 +68,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<UserDto>> UpdateUserAsync(UpdateUserDto updateUserDto)
+    public async Task<ActionResult<UserDto>> UpdateUserAsync(long id, UpdateUserDto updateUserDto)
     {
         //Validate model for server-side validation
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         User user = new User
         {
-            Id = updateUserDto.Id,
+            Id = id,
             Forename = updateUserDto.Forename,
             Surname = updateUserDto.Surname,
             Email = updateUserDto.Email,
