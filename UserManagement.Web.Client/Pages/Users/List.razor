@@ -1,4 +1,4 @@
-﻿@page "/users"
+﻿@page "/"
 @using UserManagement.Shared.Models
 @using UserManagement.Web.Client.Services.Interfaces
 @inject IUserApiService UserApiService
@@ -23,6 +23,14 @@
 			{
 				<tr>
 					<td colspan="6"><em>Loading...</em></td>
+				</tr>
+			}
+			else if (!userList.Items.Any())
+			{
+				<tr>
+					<td colspan="7" class="text-center py-4">
+						<em>No users found</em>
+					</td>
 				</tr>
 			}
 			else

@@ -2,6 +2,7 @@
 @using UserManagement.Shared.Models
 @using UserManagement.Web.Client.Services.Interfaces
 @inject IUserApiService UserApiService
+@inject IToastService ToastService
 @inject NavigationManager Navigation
 
 <PageTitle>View User</PageTitle>
@@ -58,9 +59,14 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		user = await UserApiService.GetUserByIdAsync(Id);
+		if (user == null)
+		{
+			ToastService.ShowWarning("User not found.");
+			Navigation.NavigateTo("/users");
+		}
 	}
 
 	private void Edit() => Navigation.NavigateTo($"/users/{Id}/edit");
 	private void Delete() => Navigation.NavigateTo($"/users/{Id}/delete");
-	private void BackToList() => Navigation.NavigateTo("/users");
+	private void BackToList() => Navigation.NavigateTo("/");
 }

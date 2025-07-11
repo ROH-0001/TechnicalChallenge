@@ -2,6 +2,7 @@
 @using UserManagement.Shared.Models
 @using UserManagement.Web.Client.Services.Interfaces
 @inject IUserApiService UserApiService
+@inject IToastService ToastService
 @inject NavigationManager Navigation
 
 <PageTitle>Delete User</PageTitle>
@@ -51,6 +52,11 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		user = await UserApiService.GetUserByIdAsync(Id);
+		if (user == null)
+		{
+			ToastService.ShowWarning("User not found.");
+			Navigation.NavigateTo("/users");
+		}
 	}
 
 	private async Task ConfirmDelete()
@@ -61,7 +67,12 @@ else
 			bool success = await UserApiService.DeleteAsync(Id);
 			if (success)
 			{
+				ToastService.ShowSuccess("User deleted successfully!");
 				Navigation.NavigateTo("/users");
+			}
+			else
+			{
+				ToastService.ShowError("Failed to delete user. try again");
 			}
 		}
 		finally

@@ -3,6 +3,7 @@
 @using UserManagement.Shared.Models
 @using UserManagement.Web.Client.Services.Interfaces
 @inject IUserApiService UserApiService
+@inject IToastService ToastService
 @inject NavigationManager Navigation
 
 <PageTitle>Edit User</PageTitle>
@@ -65,17 +66,23 @@ else
     protected override async Task OnInitializedAsync()
     {
         UserDto? user = await UserApiService.GetUserByIdAsync(Id);
-        if (user != null)
+        if (user == null)
         {
-            updateUserDto = new UpdateUserDto
-            {
-                Forename = user.Forename!,
-                Surname = user.Surname!,
-                Email = user.Email!,
-                IsActive = user.IsActive,
-                DateOfBirth = user.DateOfBirth
-            };
+			ToastService.ShowWarning("User not found.");
+			Navigation.NavigateTo("/users");
         }
+		else
+		{
+			updateUserDto = new UpdateUserDto
+			{
+				Forename = user.Forename!,
+				Surname = user.Surname!,
+				Email = user.Email!,
+				IsActive = user.IsActive,
+				DateOfBirth = user.DateOfBirth
+			};
+		}
+
     }
 
     private async Task HandleValidSubmit()
@@ -83,11 +90,16 @@ else
         if (updateUserDto == null) return;
         
         isSubmitting = true;
-        UserDto? result = await UserApiService.UpdateAsync(Id, updateUserDto);
-        if (result != null)
-        {
-            Navigation.NavigateTo($"/users/{Id}");
-        }
+		UserDto? result = await UserApiService.UpdateAsync(Id, updateUserDto);
+		if (result != null)
+		{
+			ToastService.ShowSuccess($"User '{result.Forename} {result.Surname}' updated successfully!");
+			Navigation.NavigateTo($"/users/{Id}");
+		}
+		else
+		{
+			ToastService.ShowError("Failed to update user. try again");
+		}
         isSubmitting = false;
     }
 
