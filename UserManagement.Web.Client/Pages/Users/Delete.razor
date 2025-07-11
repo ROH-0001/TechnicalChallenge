@@ -55,7 +55,7 @@ else
 		if (user == null)
 		{
 			ToastService.ShowWarning("User not found.");
-			Navigation.NavigateTo("/users");
+			Navigation.NavigateTo("/");
 		}
 	}
 
@@ -68,7 +68,7 @@ else
 			if (success)
 			{
 				ToastService.ShowSuccess("User deleted successfully!");
-				Navigation.NavigateTo("/users");
+				Navigation.NavigateTo("/");
 			}
 			else
 			{

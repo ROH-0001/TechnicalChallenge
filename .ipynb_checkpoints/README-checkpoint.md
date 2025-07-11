@@ -5,8 +5,6 @@ We recommend that you use [Visual Studio (Community Edition)](https://visualstud
 
 **The application uses an in-memory database, so changes will not be persisted between executions.**
 
-## Please scroll to the bottom to see my notes!
-
 ## The Exercise
 Complete as many of the tasks below as you feel comfortable with. These are split into 4 levels of difficulty 
 * **Standard** - Functionality that is common when working as a web developer
@@ -65,42 +63,3 @@ Add additional layers to the application that will ensure that it is scaleable w
 
 * Please feel free to change or refactor any code that has been supplied within the solution and think about clean maintainable code and architecture when extending the project.
 * If any additional packages, tools or setup are required to run your completed version, please document these thoroughly.
-
-## Rohaan's notes below
-### Completed Tasks
-
-**Tasks 1-3 (Standard):** All standard requirements completed with validation.
-
-**Task 5 (Expert):** Rewrote the existing MVC application to use Blazor WebAssembly and ASP.NET Core Web API backend using best practices. Converted entire service (domain) & data layers to be asynchronous.
-
-**Task 6 (Platform):** Implemented a pipeline for CI (building and testing) using GitHub Actions.
-
-### Architecture Overview
-
-The projects in the solution remain relatively the same but with a few additions:
-
-- **UserManagement.Web.API** - REST API with Swagger documentation
-- **UserManagement.Web.Client** - Blazor WebAssembly application (Includes Blazored.Toast nuget package)
-- **UserManagement.Web.Shared** - Shared classes (i.e. DTOs) between client/server
-- **UserManagement.Services** - Same (Server-side Business logic layer)
-- **UserManagement.Data** - Same (Server-side Data access layer)
-
-### Technical Implementation Details
-
-**Validation:** Implemented both client-side and server-side validation using DataAnnotations on form models.
-
-**UX:** Added toast notifications for CRUD operations and loading states throughout the client. Form validation displays clear error messages.
-
-**Testing:** Focused on unit testing the API and Service layer. All my tests follow the existing AAA pattern and use the same conventions as the existing ones.
-
-### Design Decisions
-
-**.Shared class library:** The .Shared project contains DTOs and form models used by both client and server for type safety and reducing duplication.
-
-**Email Uniqueness:** Intentionally allowed duplicate emails since this is a user management system without an auth requirement.
-
-**Task Prioritisation:** My main focus was delivering a high quality solution focusing on core functionality, architecture, and comprehensive testing to demonstrate my existing skills. 
-
-### Running the Application
-
-1. Run as multi-startup project (UserManagement.Web.API and UserManagement.Web.Client)

@@ -60,7 +60,7 @@
 		if (result != null)
 		{
 			ToastService.ShowSuccess("User created successfully!");
-			Navigation.NavigateTo("/users");
+			Navigation.NavigateTo("/");
 		}
 		else
 		{
@@ -70,6 +70,6 @@
 		isSubmitting = false;
 	}
 
-	private void Cancel() => Navigation.NavigateTo("/users");
+	private void Cancel() => Navigation.NavigateTo("/");
 }
 
