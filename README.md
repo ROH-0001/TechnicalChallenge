@@ -71,7 +71,7 @@ Add additional layers to the application that will ensure that it is scaleable w
 
 **Tasks 1-3 (Standard):** All standard requirements completed with validation.
 
-**Task 5 (Expert):** Rewrote the existing MVC application to use Blazor WebAssembly and ASP.NET Core Web API backend using best practices. Converted entire service (domain) & data layers to be asynchronous.
+**Task 5 (Expert):** Rewrote the existing MVC application to use Blazor WebAssembly (front-end) and ASP.NET Core Web API (back-end) using best practices. Converted existing service (domain) & data layers to be asynchronous.
 
 **Task 6 (Platform):** Implemented a pipeline for CI (building and testing) using GitHub Actions.
 
@@ -95,7 +95,7 @@ The projects in the solution remain relatively the same but with a few additions
 
 ### Design Decisions
 
-**.Shared class library:** The .Shared project contains DTOs and form models used by both client and server for type safety and reducing duplication.
+**.Shared class library:** The .Shared project contains the models used by both client and server for type safety and reducing duplication.
 
 **Email Uniqueness:** Intentionally allowed duplicate emails since this is a user management system without an auth requirement.
 
