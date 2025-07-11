@@ -47,5 +47,26 @@ public class DataContextTests
         result.Should().NotContain(s => s.Email == entity.Email);
     }
 
+    [Fact]
+    public async Task UpdateAsync_WhenEntityExists_ShouldPersistChanges()
+    {
+        // Arrange
+        var context = CreateContext();
+        var entity = (await context.GetAllAsync<User>()).First();
+        entity.Forename = "Updated";
+        entity.Email = "updated@example.com";
+        entity.IsActive = !entity.IsActive;
+
+        // Act
+        await context.UpdateAsync(entity);
+
+        // Assert
+        var result = await context.GetAllAsync<User>();
+        result.Should().Contain(u => u.Email == "updated@example.com")
+            .Which.Forename.Should().Be("Updated");
+    }
+
+
+
     private DataContext CreateContext() => new();
 }

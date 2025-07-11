@@ -9,7 +9,6 @@ namespace UserManagement.Web.API.Controllers;
 public class UsersController : ControllerBase
 {
     //TODO: Documentation for swagger
-    //TODO: BUnit for blazor test?
     private readonly IUserService _userService;
 
     public UsersController(IUserService userService) => _userService = userService;
