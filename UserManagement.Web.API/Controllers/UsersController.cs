@@ -8,10 +8,16 @@ namespace UserManagement.Web.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    //TODO: Documentation for swagger
     private readonly IUserService _userService;
 
     public UsersController(IUserService userService) => _userService = userService;
+
+    /// <summary>
+    /// Gets all users or filters by active status
+    /// </summary>
+    /// <param name="isActive">Optional filter to get only active or inactive users</param>
+    /// <returns>List of users</returns>
+    /// <response code="200">Returns the list of users</response>
 
     [HttpGet]
    public async Task<ActionResult<UserListDto>> GetUsersAsync([FromQuery] bool? isActive = null)
@@ -38,7 +44,13 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-
+    /// <summary>
+    /// Gets a specific user by ID
+    /// </summary>
+    /// <param name="id">The user ID</param>
+    /// <returns>User details</returns>
+    /// <response code="200">Returns the user</response>
+    /// <response code="404">User not found</response>
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUserAsync(long id)
     {
@@ -48,6 +60,13 @@ public class UsersController : ControllerBase
         return Ok(MapToDto(user));
     }
 
+    /// <summary>
+    /// Creates a new user
+    /// </summary>
+    /// <param name="createUserDto">User creation data</param>
+    /// <returns>Created user</returns>
+    /// <response code="200">Returns the created user</response>
+    /// <response code="400">Invalid input data</response>
     [HttpPost]
     public async Task<ActionResult<UserDto>> CreateUserAsync(CreateUserDto createUserDto)
     {
@@ -67,6 +86,15 @@ public class UsersController : ControllerBase
         return Ok(MapToDto(createdUser));
     }
 
+    /// <summary>
+    /// Updates an existing user
+    /// </summary>
+    /// <param name="id">The user ID to update</param>
+    /// <param name="updateUserDto">Updated user data</param>
+    /// <returns>Updated user</returns>
+    /// <response code="200">Returns the updated user</response>
+    /// <response code="400">Invalid input data</response>
+    /// <response code="404">User not found</response>
     [HttpPut("{id}")]
     public async Task<ActionResult<UserDto>> UpdateUserAsync(long id, UpdateUserDto updateUserDto)
     {
@@ -89,6 +117,13 @@ public class UsersController : ControllerBase
         return Ok(MapToDto(updatedUser));
     }
 
+    /// <summary>
+    /// Deletes a user
+    /// </summary>
+    /// <param name="id">The user ID to delete</param>
+    /// <returns>No content on success</returns>
+    /// <response code="204">User successfully deleted</response>
+    /// <response code="404">User not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteUserAsync(long id)
     {
