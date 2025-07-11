@@ -58,7 +58,7 @@ else
 		isDeleting = true;
 		try
 		{
-			var success = await UserApiService.DeleteAsync(Id);
+			bool success = await UserApiService.DeleteAsync(Id);
 			if (success)
 			{
 				Navigation.NavigateTo("/users");

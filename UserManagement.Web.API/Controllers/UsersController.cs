@@ -9,6 +9,7 @@ namespace UserManagement.Web.API.Controllers;
 public class UsersController : ControllerBase
 {
     //TODO: Documentation for swagger
+    //TODO: BUnit for blazor test?
     private readonly IUserService _userService;
 
     public UsersController(IUserService userService) => _userService = userService;
@@ -42,7 +43,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUserAsync(long id)
     {
-        var user = await _userService.GetUserByIdAsync(id);
+        User? user = await _userService.GetUserByIdAsync(id);
         if (user == null) return NotFound();
 
         return Ok(MapToDto(user));
@@ -54,7 +55,7 @@ public class UsersController : ControllerBase
         //Validate model for server-side validation
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = new User
+        User? user = new User
         {
             Forename = createUserDto.Forename,
             Surname = createUserDto.Surname,
@@ -63,7 +64,7 @@ public class UsersController : ControllerBase
             DateOfBirth = createUserDto.DateOfBirth
         };
 
-        var createdUser = await _userService.CreateAsync(user);
+        User? createdUser = await _userService.CreateAsync(user);
         return Ok(MapToDto(createdUser));
     }
 

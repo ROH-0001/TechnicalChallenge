@@ -64,7 +64,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var user = await UserApiService.GetUserByIdAsync(Id);
+        UserDto? user = await UserApiService.GetUserByIdAsync(Id);
         if (user != null)
         {
             updateUserDto = new UpdateUserDto
@@ -83,7 +83,7 @@ else
         if (updateUserDto == null) return;
         
         isSubmitting = true;
-        var result = await UserApiService.UpdateAsync(Id, updateUserDto);
+        UserDto? result = await UserApiService.UpdateAsync(Id, updateUserDto);
         if (result != null)
         {
             Navigation.NavigateTo($"/users/{Id}");

@@ -24,7 +24,7 @@ public class UserService : IUserService
 
     public async Task<User?> GetUserByIdAsync(long id)
     {
-        var users = await _dataAccess.GetAllAsync<User>();
+        IQueryable<User> users = await _dataAccess.GetAllAsync<User>();
         return users.FirstOrDefault(x => x.Id == id);
     }
 
@@ -36,7 +36,7 @@ public class UserService : IUserService
 
     public async Task<User?> UpdateAsync(User user)
     {
-        var existingUser = await GetUserByIdAsync(user.Id);
+        User? existingUser = await GetUserByIdAsync(user.Id);
         if (existingUser == null) return null;
 
         //remap values onto the already tracked entity to get rid of duplicate key error trying to pass `user`
@@ -52,7 +52,7 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteAsync(long id)
     {
-        var user = await GetUserByIdAsync(id);
+        User? user = await GetUserByIdAsync(id);
         if (user == null) return false;
 
         await _dataAccess.DeleteAsync(user);

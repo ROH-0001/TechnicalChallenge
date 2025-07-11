@@ -55,7 +55,7 @@
 	private async Task HandleValidSubmit()
 	{
 		isSubmitting = true;
-		var result = await UserApiService.CreateAsync(createUserDto);
+		UserDto? result = await UserApiService.CreateAsync(createUserDto);
 		if (result != null)
 		{
 			Navigation.NavigateTo("/users");
